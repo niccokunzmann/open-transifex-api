@@ -7,9 +7,11 @@
 <body>
     <h1>Transifex open API endpoints</h1>
     <p>
-        These endpoints are open to projects adding the user niccokunzmann3
-        on <a href="https://transifex.com">Transifex</a>.
+        These endpoints are open to projects adding the user
+        <a href="https://www.transifex.com/user/profile/{{ username }}/">{{ username }}</a>
+        on  <a href="https://transifex.com">Transifex</a>.
     </p>
+    <h2 id="api">API</h2>
     <ul>
     {% for endpoint in open_apis: %}
         <li>
@@ -17,16 +19,65 @@
             <p>
                 To use this API endpoint, you must invite
                 <a href="https://www.transifex.com/user/profile/{{ username }}/">{{ username }}</a>
-                as a {{ endpoint["role"] }}. 
+                as a <strong>{{ endpoint["role"] }}</strong>. 
                 This is an example command for
                 <a href="{{ endpoint["example"].format(host=host) }}">{{ endpoint["path"] }}</a>.
             </p>
             <pre>
 curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
             </pre>
+            {% if endpoint["modifications"]: %}
+                <p>
+                    These additional modifications of the endpoint are available:
+                </p>
+                <ul>
+                {% for modification in endpoint["modifications"] %}
+                    <li>
+                        <h4>{{ modification["name"] }}</h4>
+                        <p>
+                            {{ modification["description"] }} <br/>
+                            This is an example command for
+                            <a href="{{ modification["example"].format(host=host) }}">{{ modification["path"] }}</a>.
+                        </p>
+                        <pre>curl -i -L --user -X GET '{{ modification["example"].format(host=host) }}'</pre>
+                    </li>
+                {% endfor %}
+                </ul>
+            {% endif %}
         </li>
     {% endfor %}
     </ul>
+    <p>
+        After the user was added, you can check that your project turns up in
+        the Projects' endpoint.
+        If that is so, you can use the API.
+    </p>
+    <h2>Dynamic Badges</h2>
+    <p>
+        These badges can be generated using the 
+        <a href="#api">API</a> and <a href="https://shields.io">shields.io</a>.
+    </p>
+    <ul>
+    {% for badge in badges: %}
+        <li>
+            <h3>{{ badge["name"] }}</h3>
+            <p>
+                {{ badge["description"] }}<br/>
+                Example: <img src="{{ badge['example_url'](host) }}" />
+            </p>
+            <pre>{{ badge['example_url'](host) }}</pre>
+            <a href="{{ badge['example_url'](host) }}">
+            {% autoescape false %}
+                {{ badge['show_url'](host) }}
+            {% endautoescape %}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+    <footer>
+        You can view the source code of this application on
+        <a href="https://github.com/niccokunzmann/open-transifex-api/">GitHub</a>.
+    </footer>
 </body>
 </html>
 
