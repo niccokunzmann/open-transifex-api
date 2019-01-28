@@ -12,6 +12,7 @@ CACHE_TIMEOUT = int(os.environ.get("APP_CACHE_TIMEOUT", 60 * 60 * 24))
 TRANSIFEX_PASSWORD = os.environ["TRANSIFEX_PASSWORD"] # from https://www.transifex.com/user/settings/api/
 TRANSIFEX_USERNAME = os.environ.get("TRANSIFEX_USERNAME", "niccokunzmann3") # the user for the TRANSIFEX_PASSWORD
 SHIELDS_API = os.environ.get("SHIELDS_API", "https://img.shields.io") # replace this, if you run shields locally
+HAS_HTTPS = os.environ.get("APP_HAS_HTTPS", "false").lower() == "true"
 
 # constants
 AUTH = ("api", TRANSIFEX_PASSWORD)
@@ -32,6 +33,7 @@ TEMPLATE_ENTRIES = {
     "label": "LABEL"
 }
 PARAM_MODIFICATION = "modification"
+PROTOCOL = "http" + ("s" if HAS_HTTPS else "") + "://"
 
 # globals
 app = Flask(__name__, template_folder= "templates")
@@ -90,7 +92,7 @@ def open_api(name, role, url, documentation, modifications={}):
         resp.mimetype = "application/json"
         return resp
     
-    example_url = "http://{host}" + urllib.parse.urlparse(url_template.format(**EXAMPLE_ENTRIES)).path
+    example_url = PROTOCOL + "{host}" + urllib.parse.urlparse(url_template.format(**EXAMPLE_ENTRIES)).path
     mods = []
     for modification_name in sorted(modifications):
         function = modifications[modification_name]
@@ -174,7 +176,7 @@ def dynamic_badge(name, description, app_path, query):
     """Create a badge."""
     def template_url(host, args=TEMPLATE_ENTRIES):
         badge_query = {
-            "url": "http://" + host + app_path.format(**args),
+            "url": PROTOCOL + host + app_path.format(**args),
             "label": args["label"],
             "query": query.format(**args),
             "colorB": args["color"]}

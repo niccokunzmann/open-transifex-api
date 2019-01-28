@@ -17,6 +17,6 @@ COPY requirements.txt .
 RUN cd /app && \
     pip install --no-cache -r requirements.txt
 
-COPY templates . 
+COPY templates templates
 COPY app.py .
 

@@ -37,7 +37,8 @@ Optional:
   If you want to test your badges as a developer,
   you can set this to `http://localhost:8080` and install
   [shields.io](https://github.com/badges/shields/#development).
-
+- `APP_HAS_HTTPS` defaults to `false`  
+  If your app is behind HTTPS, you can enable this.
 
 
 ## Docker
@@ -49,13 +50,13 @@ docker run --rm                                \
            -p 5000:5000                        \
            -e "TRANSIFEX_PASSWORD=..."         \
            -e "TRANSIFEX_USER=..."             \
-           niccokunzmann/open_transifex_api
+           niccokunzmann/open-transifex-api
 ```
 
 Build the image:
 
 ```
-docker build . -t niccokunzmann/open_transifex_api
+docker build . -t niccokunzmann/open-transifex-api
 ```
 
 
