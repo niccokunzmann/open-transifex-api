@@ -42,6 +42,26 @@ Optional:
 - `APP_HAS_HTTPS` defaults to `false`  
   If your app is behind HTTPS, you can enable this.
 
+## Development
+
+Install Python3 and Pip.
+
+```
+pip install -r requirements.txt
+```
+
+Set environment variables.
+
+```
+export TRANSIFEX_PASSWORD=...
+export TRANSIFEX_USERNAME=...
+```
+
+Start the app.
+
+```
+python3 app.py
+```
 
 ## Docker
 
