@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from flask import Flask, render_template, make_response, request
+from flask import Flask, render_template, make_response, request, jsonify, redirect
 from flask_caching import Cache
 import tempfile
 import os
@@ -22,7 +22,9 @@ EXAMPLE_ENTRIES = {
     "organization_slug": "12-characters",
     "language_code": "de",
     "color": "green",
-    "label": "label"
+    "label": "label",
+    "extension": "svg",
+    "stat": "reviewed"
 }
 TEMPLATE_ENTRIES = {
     "resource_slug": "RESOURCE",
@@ -249,6 +251,95 @@ dynamic_badge(
     "/organizations/{organization_slug}/projects/{project_slug}/resources/?modification=summary&language_code={language_code}",
     '$.stats[?(@.name=="reviewed")].percentage')
 
+def fraction_to_color(fraction):
+    i = int(255 * fraction)
+    # hex format, see https://stackoverflow.com/a/19996754/1320237
+    return "#{:02X}{:02X}00".format(255 - i, i)
+
+badges = []
+
+DEFAULT_BADGE = {
+    "schemaVersion": 1,
+    "label": "Translation"
+}
+
+def badge(path):
+    template_path = path.replace("<", "{").replace(">", "}")
+    def add_endpoint(function):
+        example_url = PROTOCOL + "{host}" + template_path.format(**EXAMPLE_ENTRIES)
+        url = PROTOCOL + "{host}" + path
+        json_url = PROTOCOL + "{host}" + path.replace("<extension>", "json")
+        badges.append({
+            "name": function.__name__,
+            "path": path,
+            "description": function.__doc__,
+            "example_url": example_url,
+            "template_url": url,
+            "json_url": json_url,
+        })
+        @app.route(path, methods=['GET'])
+        # use query string in cache, see https://stackoverflow.com/a/47181782/1320237
+        @cache.cached(timeout=CACHE_TIMEOUT, query_string=True)
+        @change_name(function.__name__ + "_" + str(len(badges)))
+        def get(extension, **kw):
+            if extension == "json":
+                result = DEFAULT_BADGE.copy()
+                badge = function(**kw)
+                result.update(badge)
+                return jsonify(result)
+            kw["extension"] = "json"
+            query = request.args.copy()
+            query["url"] = PROTOCOL + request.host + template_path.format(**kw)
+            query_string = urllib.parse.urlencode(query)
+            redirect_url = SHIELDS_API + "/badge/endpoint." + extension + "?" + query_string
+            return redirect(redirect_url)
+        return function
+    return add_endpoint
+
+@badge("/badge/<organization_slug>/project/<project_slug>/<stat>.<extension>")
+def project_progress(organization_slug, project_slug, stat):
+    """Summarize the project progress.
+    
+    <ul>
+        <li>organization_slug - the organization name from the URL</li>
+        <li>project_slug - the project name from the URL</li>
+        <li>stat - either "translated" or "reviewed"</li>
+    </ul>
+    """
+    return project_language_progress(organization_slug, project_slug, stat)
+
+@badge("/badge/<organization_slug>/project/<project_slug>/language/<language_code>/<stat>.<extension>")
+def project_language_progress(organization_slug, project_slug, stat, language_code=None):
+    """Summarize the project progress of a language.
+    
+    <ul>
+        <li>organization_slug - the organization name from the URL</li>
+        <li>project_slug - the project name from the URL</li>
+        <li>stat - either "translated" or "reviewed"</li>
+        <li>language_code - the language you want to summarize</li>
+    </ul>
+    """
+    url = "https://api.transifex.com/organizations/" + organization_slug + "/projects/" + project_slug + "/resources/"
+    if language_code:
+        url += "?language_code=" + language_code
+    api = requests.get(url, auth=AUTH, params=request.args)
+    resources = api.json()
+    fraction = 0
+    assert stat in ("reviewed", "translated")
+    for resource in resources:
+        for statistic in resource["stats"].values():
+            if isinstance(statistic, dict) and statistic["name"] == stat:
+                    fraction += statistic["percentage"]
+    fraction /= len(resources)
+    # provide json service interface
+    # see https://shields.io/#/endpoint
+    result = {
+      "label": project_slug,
+      "message": str(int(round(fraction * 100))) + "%",
+      "color": fraction_to_color(fraction)
+    }
+    return result
+
 @app.route("/", methods=['GET']) 
 def index():
     return render_template(
@@ -256,7 +347,8 @@ def index():
         open_apis=open_apis,
         host=request.host,
         username=TRANSIFEX_USERNAME,
-        badges=dynamic_badges)
+        dynamic_badges=dynamic_badges,
+        badges=badges)
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0")

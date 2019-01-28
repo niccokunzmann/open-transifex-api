@@ -52,13 +52,35 @@ curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
         the Projects' endpoint.
         If that is so, you can use the API.
     </p>
+    <h2>Badges</h2>
+    <p>
+        The API provides a
+        <a href="https://shields.io/#/endpoint">Shields.io JSON enpoint</a>
+        to generate badges.
+    </p>
+    <ul>
+    {% for badge in badges: %}
+        <li>
+            <h3>{{ badge["name"].replace("_", " ") }}</h3>
+            <p>
+                {% autoescape false %}
+                    {{ badge["description"] }}<br/>
+                {% endautoescape %}
+                Example: <img src="{{ badge['example_url'].format(host=host) }}" />
+            </p>
+            <pre>{{ badge['example_url'].format(host=host) }}</pre>
+            <pre>{{ badge['template_url'].format(host=host) }}</pre>
+            <pre>{{ badge['json_url'].format(host=host) }}</pre>
+        </li>
+    {% endfor %}
+    </ul>
     <h2>Dynamic Badges</h2>
     <p>
         These badges can be generated using the 
         <a href="#api">API</a> and <a href="https://shields.io">shields.io</a>.
     </p>
     <ul>
-    {% for badge in badges: %}
+    {% for badge in dynamic_badges: %}
         <li>
             <h3>{{ badge["name"] }}</h3>
             <p>
