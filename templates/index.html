@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Transifex open API endpoints</title>
+</head>
+<body>
+    <h1>Transifex open API endpoints</h1>
+    <p>
+        These endpoints are open to projects adding the user niccokunzmann3
+        on <a href="https://transifex.com">Transifex</a>.
+    </p>
+    <ul>
+    {% for endpoint in open_apis: %}
+        <li>
+            <h3><a href="{{ endpoint["documentation"] }}">{{ endpoint["name"] }}</a></h3>
+            <p>
+                To use this API endpoint, you must invite
+                <a href="https://www.transifex.com/user/profile/{{ username }}/">{{ username }}</a>
+                as a {{ endpoint["role"] }}. 
+                This is an example command for
+                <a href="{{ endpoint["example"].format(host=host) }}">{{ endpoint["path"] }}</a>.
+            </p>
+            <pre>
+curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
+            </pre>
+        </li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
+
