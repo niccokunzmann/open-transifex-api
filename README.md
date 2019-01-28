@@ -1,5 +1,7 @@
 # Open Transifex API
 
+[![](https://dockerbuildbadges.quelltext.eu/status.svg?repository=open-transifex-api&organization=niccokunzmann)](https://hub.docker.com/r/niccokunzmann/open-transifex-api/)
+
 This project aims at making it easy for people to share their open
 projects on Transifex with an open API to services on the Internet.
 
@@ -13,7 +15,7 @@ To open your API, you need to invite the account to your project which runs
 the endpoint.
 
 If you run an endpoint, you can list it here:
-- 
+- [transifex.quelltext.eu][quelltext] (daily deployment)
 
 ## Configuration
 
@@ -64,4 +66,6 @@ docker build . -t niccokunzmann/open-transifex-api
 
 - https://github.com/transifex/transifex/issues/319
 - https://github.com/greatislander/tenpercent
+
+[quelltext]: https://transifex.quelltext.eu
 
