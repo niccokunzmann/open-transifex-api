@@ -57,6 +57,8 @@ curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
         The API provides a
         <a href="https://shields.io/#/endpoint">Shields.io JSON enpoint</a>
         to generate badges.
+        Please note that you can use the usual shields parameters such as style.
+        <img src="{{ badges[0]['example_url'].format(host=host) }}?style=for-the-badge" />
     </p>
     <ul>
     {% for badge in badges: %}

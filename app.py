@@ -24,7 +24,7 @@ EXAMPLE_ENTRIES = {
     "color": "green",
     "label": "label",
     "extension": "svg",
-    "stat": "reviewed"
+    "stat": "translated"
 }
 TEMPLATE_ENTRIES = {
     "resource_slug": "RESOURCE",
@@ -263,8 +263,22 @@ DEFAULT_BADGE = {
     "label": "Translation"
 }
 
+PARAMETER_EXPLANATIONS = {
+    "organization_slug": "the organization name from the URL",
+    "project_slug": "the project name from the URL",
+    "resource_slug": "the resource name from the URL",
+    "language_code": "the language you want to summarize",
+    "stat": "either translated or reviewed",
+    "extension": "the extension of the file, e.g. svg or json",
+}
+
 def badge(path):
     template_path = path.replace("<", "{").replace(">", "}")
+    parameter_description = "<ul>"
+    for key, explanation in PARAMETER_EXPLANATIONS.items():
+        if "<" + key + ">" in path:
+            parameter_description += "<li><strong>" + key + "</strong>" + " - " + explanation + "</li>"
+    parameter_description += "</ul>"
     def add_endpoint(function):
         example_url = PROTOCOL + "{host}" + template_path.format(**EXAMPLE_ENTRIES)
         url = PROTOCOL + "{host}" + path
@@ -272,7 +286,7 @@ def badge(path):
         badges.append({
             "name": function.__name__,
             "path": path,
-            "description": function.__doc__,
+            "description": function.__doc__ + parameter_description,
             "example_url": example_url,
             "template_url": url,
             "json_url": json_url,
@@ -298,27 +312,25 @@ def badge(path):
 
 @badge("/badge/<organization_slug>/project/<project_slug>/<stat>.<extension>")
 def project_progress(organization_slug, project_slug, stat):
-    """Summarize the project progress.
-    
-    <ul>
-        <li>organization_slug - the organization name from the URL</li>
-        <li>project_slug - the project name from the URL</li>
-        <li>stat - either "translated" or "reviewed"</li>
-    </ul>
-    """
-    return project_language_progress(organization_slug, project_slug, stat)
+    """Summarize the project progress."""
+    return project_progress_result(organization_slug, project_slug, None, stat, None, project_slug)
 
 @badge("/badge/<organization_slug>/project/<project_slug>/language/<language_code>/<stat>.<extension>")
-def project_language_progress(organization_slug, project_slug, stat, language_code=None):
-    """Summarize the project progress of a language.
-    
-    <ul>
-        <li>organization_slug - the organization name from the URL</li>
-        <li>project_slug - the project name from the URL</li>
-        <li>stat - either "translated" or "reviewed"</li>
-        <li>language_code - the language you want to summarize</li>
-    </ul>
-    """
+def project_language_progress(organization_slug, project_slug, stat, language_code):
+    """Summarize the project progress of a language."""
+    return project_progress_result(organization_slug, project_slug, None, stat, language_code, language_code)
+
+@badge("/badge/<organization_slug>/project/<project_slug>/resource/<resource_slug>/<stat>.<extension>")
+def resource_progress(organization_slug, project_slug, resource_slug, stat):
+    """Summarize the resource progress."""
+    return project_progress_result(organization_slug, project_slug, resource_slug, stat, None, resource_slug)
+
+@badge("/badge/<organization_slug>/project/<project_slug>/resource/<resource_slug>/language/<language_code>/<stat>.<extension>")
+def resource_language_progress(organization_slug, project_slug, resource_slug, stat, language_code):
+    """Summarize the resource progress of a language."""
+    return project_progress_result(organization_slug, project_slug, resource_slug, stat, language_code, resource_slug + " (" + language_code + ")")
+
+def project_progress_result(organization_slug, project_slug, resource_slug, stat, language_code, label):
     url = "https://api.transifex.com/organizations/" + organization_slug + "/projects/" + project_slug + "/resources/"
     if language_code:
         url += "?language_code=" + language_code
@@ -327,14 +339,20 @@ def project_language_progress(organization_slug, project_slug, stat, language_co
     fraction = 0
     assert stat in ("reviewed", "translated")
     for resource in resources:
+        if resource_slug is not None and resource["slug"] != resource_slug:
+            continue
+        found_stat = False
         for statistic in resource["stats"].values():
             if isinstance(statistic, dict) and statistic["name"] == stat:
-                    fraction += statistic["percentage"]
-    fraction /= len(resources)
+                fraction += statistic["percentage"]
+                found_stat = True
+        assert found_stat, "Found the stat " + stat
+    if resource_slug is None:
+        fraction /= len(resources)
     # provide json service interface
     # see https://shields.io/#/endpoint
     result = {
-      "label": project_slug,
+      "label": label,
       "message": str(int(round(fraction * 100))) + "%",
       "color": fraction_to_color(fraction)
     }
