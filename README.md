@@ -8,8 +8,8 @@ projects on Transifex with an open API to services on the Internet.
 It includes:
 
 - Open Endpoints of the Transifex API
-- Example usage of the Transifex API by [shields.io] through dynamic badges.
-- TODO: Badge endpoints for projects.
+- Example usage of the Transifex API by [shields.io] through dynamic badges
+- Badge endpoints for projects
 
 To open your API, you need to invite the account to your project which runs
 the endpoint.
