@@ -1,6 +1,7 @@
 # Open Transifex API
 
 [![](https://dockerbuildbadges.quelltext.eu/status.svg?repository=open-transifex-api&organization=niccokunzmann)](https://hub.docker.com/r/niccokunzmann/open-transifex-api/)
+[![](https://transifex.quelltext.eu/badge/projects.svg)][quelltext]
 
 This project aims at making it easy for people to share their open
 projects on Transifex with an open API to services on the Internet.

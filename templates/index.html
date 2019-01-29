@@ -10,6 +10,7 @@
         These endpoints are open to projects adding the user
         <a href="https://www.transifex.com/user/profile/{{ username }}/">{{ username }}</a>
         on  <a href="https://transifex.com">Transifex</a>.
+        This service offers a read-only interface to your project's API.
     </p>
     <h2 id="api">API</h2>
     <ul>
@@ -58,7 +59,7 @@ curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
         <a href="https://shields.io/#/endpoint">Shields.io JSON enpoint</a>
         to generate badges.
         Please note that you can use the usual shields parameters such as style.
-        <img src="{{ badges[0]['example_url'].format(host=host) }}?style=for-the-badge" />
+        <img src="/badge/projects.svg?style=for-the-badge" />
     </p>
     <ul>
     {% for badge in badges: %}

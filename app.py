@@ -358,6 +358,22 @@ def project_progress_result(organization_slug, project_slug, resource_slug, stat
     }
     return result
 
+@badge("/badge/projects.<extension>")
+def open_api_count():
+    """Show the number of projects providing an open Transifex API."""
+    url = "https://www.transifex.com/api/2/projects/"
+    api = requests.get(url, auth=AUTH, params=request.args)
+    projects = api.json()
+    # provide json service interface
+    # see https://shields.io/#/endpoint
+    result = {
+      "label": "open transifex api projects",
+      "message": str(len(projects)),
+      "color": "green"
+    }
+    return result
+
+
 @app.route("/", methods=['GET']) 
 def index():
     return render_template(
