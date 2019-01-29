@@ -23,6 +23,7 @@ If you run an endpoint, you can list it here:
 ## Deployment
 
 You can deploy the app using Heroku.
+There is a free plan.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
