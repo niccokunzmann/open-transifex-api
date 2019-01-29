@@ -16,6 +16,8 @@ To open your API, you need to invite the account to your project which runs
 the endpoint.
 
 If you run an endpoint, you can list it here:
+- [transifex-open-api.herokuapp.com/](https://transifex-open-api.herokuapp.com/)
+  (instant deployment)
 - [transifex.quelltext.eu][quelltext] (daily deployment)
 
 ## Deployment
