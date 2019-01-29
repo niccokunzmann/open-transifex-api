@@ -18,6 +18,15 @@ the endpoint.
 If you run an endpoint, you can list it here:
 - [transifex.quelltext.eu][quelltext] (daily deployment)
 
+## Deployment
+
+You can deploy the app using Heroku.
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
+[Heroku Button Documentation](https://devcenter.heroku.com/articles/heroku-button)
+
+
 ## Configuration
 
 Need to be set:
@@ -34,7 +43,7 @@ Need to be set:
 Optional:
 
 - `APP_CACHE_TIMEOUT` defaults to 1 day  
-  The time the response should be cached, so we do not use up the
+  The time in seconds the response should be cached, so we do not use up the
   quota of the transifex user.
 - `SHIELDS_API` defaults to `https://img.shields.io`  
   This is the endpoint used to generate badges.
@@ -43,6 +52,10 @@ Optional:
   [shields.io](https://github.com/badges/shields/#development).
 - `APP_HAS_HTTPS` defaults to `false`  
   If your app is behind HTTPS, you can enable this.
+  Note that [shields.io requires HTTPS for badges](https://github.com/badges/shields/issues/2891).
+
+All configuration must be duplicated to [app.json](app.json) in order for
+Heroku to correctly display the values.
 
 ## Development
 

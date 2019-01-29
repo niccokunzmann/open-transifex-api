@@ -1,0 +1,42 @@
+{
+  "name": "Open Transifex API",
+  "description": "Open your Transifex project's API to the world.",
+  "repository": "https://github.com/niccokunzmann/open-transifex-api",
+  "website": "https://github.com/niccokunzmann/open-transifex-api",
+  "success_url": "/",
+  "env": {
+    "TRANSIFEX_PASSWORD": {
+      "description": "Is the API token from the user settings at https://www.transifex.com/user/settings/api/. This is required to access the API.",
+      "value": "visit https://www.transifex.com/user/settings/api/",
+      "required": true
+    },
+    "TRANSIFEX_USERNAME": {
+      "description": "Is the user of the API token. This is required so that the displayed documentation allows people to invite the user to their project so the project can publish its API.",
+      "value": "secret-user",
+      "required": true
+    },
+    "APP_CACHE_TIMEOUT": {
+      "description": "The seconds the response should be cached, so we do not use up the quota of the transifex user. Default is one day.",
+      "value": "86400",
+      "required": false
+    },
+    "SHIELDS_API": {
+      "description": "This is the endpoint used to generate badges.",
+      "value": "https://img.shields.io",
+      "required": false
+    },
+    "APP_HAS_HTTPS": {
+      "description": "Since heroku offers HTTPS on every plan, enable this. Badges require HTTPS.",
+      "value": "true",
+      "required": true
+    }
+  },
+  "image": "heroku/python",
+  "keywords": [
+    "Transifex",
+    "translation",
+    "API",
+    "badges"
+  ]
+}
+
