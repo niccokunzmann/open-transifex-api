@@ -25,10 +25,11 @@ Need to be set:
 - `TRANSIFEX_PASSWORD`  
   Is the API token from [the user settings](https://www.transifex.com/user/settings/api/).
   This is required to access the API.
-- `TRANSIFEX_USERNAME` defaults to `niccokunzmann3`  
+- `TRANSIFEX_USERNAME` defaults to `secret-user`  
   Is the user of the API token. This is required so
   that the displayed documentation allows people to invite the user
   to their project so the project can publish its API.
+  E.g. the user of [here][quelltext] is `open_api`.
 
 Optional:
 

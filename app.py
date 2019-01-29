@@ -10,7 +10,7 @@ import urllib.parse
 # configuration
 CACHE_TIMEOUT = int(os.environ.get("APP_CACHE_TIMEOUT", 60 * 60 * 24))
 TRANSIFEX_PASSWORD = os.environ["TRANSIFEX_PASSWORD"] # from https://www.transifex.com/user/settings/api/
-TRANSIFEX_USERNAME = os.environ.get("TRANSIFEX_USERNAME", "niccokunzmann3") # the user for the TRANSIFEX_PASSWORD
+TRANSIFEX_USERNAME = os.environ.get("TRANSIFEX_USERNAME", "secret-user") # the user for the TRANSIFEX_PASSWORD
 SHIELDS_API = os.environ.get("SHIELDS_API", "https://img.shields.io") # replace this, if you run shields locally
 HAS_HTTPS = os.environ.get("APP_HAS_HTTPS", "false").lower() == "true"
 
