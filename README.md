@@ -24,6 +24,9 @@ You can deploy the app using Heroku.
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
+You can enable automatic deployments when the repository is updated in the
+Deploy Section of the app management.
+
 [Heroku Button Documentation](https://devcenter.heroku.com/articles/heroku-button)
 
 
@@ -53,6 +56,9 @@ Optional:
 - `APP_HAS_HTTPS` defaults to `false`  
   If your app is behind HTTPS, you can enable this.
   Note that [shields.io requires HTTPS for badges](https://github.com/badges/shields/issues/2891).
+- `PORT` defaults to `5000`  
+  Is the port the app uses.
+  This is required by [Heroku](https://devcenter.heroku.com/articles/runtime-principles#web-servers).
 
 All configuration must be duplicated to [app.json](app.json) in order for
 Heroku to correctly display the values.

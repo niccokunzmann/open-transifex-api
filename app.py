@@ -13,6 +13,7 @@ TRANSIFEX_PASSWORD = os.environ["TRANSIFEX_PASSWORD"] # from https://www.transif
 TRANSIFEX_USERNAME = os.environ.get("TRANSIFEX_USERNAME", "secret-user") # the user for the TRANSIFEX_PASSWORD
 SHIELDS_API = os.environ.get("SHIELDS_API", "https://img.shields.io") # replace this, if you run shields locally
 HAS_HTTPS = os.environ.get("APP_HAS_HTTPS", "false").lower() == "true"
+PORT = int(os.environ.get("PORT", "5000"))
 
 # constants
 AUTH = ("api", TRANSIFEX_PASSWORD)
@@ -385,5 +386,5 @@ def index():
         badges=badges)
 
 if __name__ == "__main__":
-    app.run(debug=True, host="0.0.0.0")
+    app.run(debug=True, host="0.0.0.0", port=PORT)
 
