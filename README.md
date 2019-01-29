@@ -1,6 +1,6 @@
 # Open Transifex API
 
-[![](https://dockerbuildbadges.quelltext.eu/status.svg?repository=open-transifex-api&organization=niccokunzmann)](https://hub.docker.com/r/niccokunzmann/open-transifex-api/)
+[![](https://img.shields.io/docker/build/niccokunzmann/open-transifex-api.svg)](https://hub.docker.com/r/niccokunzmann/open-transifex-api/)
 [![](https://transifex.quelltext.eu/badge/projects.svg)][quelltext]
 
 This project aims at making it easy for people to share their open
