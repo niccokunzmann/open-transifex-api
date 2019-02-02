@@ -358,7 +358,9 @@ def project_progress_result(organization_slug, project_slug, resource_slug, stat
         return {
           "label": label,
           "message": message,
-          "color": "red"
+          "color": "red",
+          "isError" : True,
+          "cacheSeconds": CACHE_TIMEOUT
         }
     fraction = 0
     assert stat in ("reviewed", "translated")
@@ -379,14 +381,17 @@ def project_progress_result(organization_slug, project_slug, resource_slug, stat
         return {
           "label": label,
           "message": "resource not found",
-          "color": "red"
+          "color": "red",
+          "isError" : True,
+          "cacheSeconds": CACHE_TIMEOUT
         }
     # provide json service interface
     # see https://shields.io/#/endpoint
     result = {
       "label": label,
       "message": str(int(round(fraction * 100))) + "%",
-      "color": fraction_to_color(fraction)
+      "color": fraction_to_color(fraction),
+      "cacheSeconds": CACHE_TIMEOUT
     }
     return result
 
