@@ -77,6 +77,36 @@ curl -i -L -X GET '{{ endpoint["example"].format(host=host) }}'
         </li>
     {% endfor %}
     </ul>
+    <ul>
+        <li>
+            This badge is shown if an organization is not found:
+            <img src="/badge/1nonexistent-organization-8321749827349/project/project1/translated.svg" />
+        </li>
+        <li>
+            This badge is shown if the organization exists but not the project:
+            <img src="/badge/12-characters/project/1nonexistent-project-8321749827349/translated.svg" />
+        </li>
+        <li>
+            This badge is shown if the organization exists and the project but not the language:
+            <img src="/badge/12-characters/project/12-characters-play/language/alksjdla/translated.svg" />
+        </li>
+        <li>
+            This badge is shown if the organization exists and the project and the language but the language is not present in the project:
+            <img src="/badge/12-characters/project/12-characters-play/language/de_AT/translated.svg" />
+        </li>
+        <li>
+            This badge is shown if the organization exists and the project but not the resource:
+            <img src="/badge/12-characters/project/12-characters-play/resource/aklsdjlksad/translated.svg" />
+        </li>
+        <li>
+            This badge is shown if the organization exists and the project and the language but not the resource:
+            <img src="/badge/12-characters/project/12-characters-play/resource/aklsdjlksad/language/de/translated.svg" />
+        </li>
+        <li>
+            This badge is shown if the organization exists and the project and the language and the resource but the user is not invited:
+            <img src="/badge/transifex/project/transifex/translated.svg" />
+        </li>
+    </ul>
     <h2>Dynamic Badges</h2>
     <p>
         These badges can be generated using the 

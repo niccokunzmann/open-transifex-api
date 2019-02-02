@@ -331,14 +331,38 @@ def resource_language_progress(organization_slug, project_slug, resource_slug, s
     """Summarize the resource progress of a language."""
     return project_progress_result(organization_slug, project_slug, resource_slug, stat, language_code, resource_slug + " (" + language_code + ")")
 
+error_responses = [
+    {
+      "error_code": "not_found",
+      "detail": "Not found."
+    },
+    {
+      "error_code": "permission_denied",
+      "detail": "You do not have permission to perform this action."
+    }
+]
 def project_progress_result(organization_slug, project_slug, resource_slug, stat, language_code, label):
     url = "https://api.transifex.com/organizations/" + organization_slug + "/projects/" + project_slug + "/resources/"
     if language_code:
         url += "?language_code=" + language_code
     api = requests.get(url, auth=AUTH, params=request.args)
     resources = api.json()
+    if isinstance(resources, dict):
+        error = resources
+        assert "error_code" in error, "assume an error message {}".format(error)
+        print(error)
+        if error["error_code"] == "permission_denied":
+            message = "invite {} as translator to use the badge.".format(TRANSIFEX_USERNAME)
+        else:
+            message = error.get("detail", error.get("language_code", "unkown error"))
+        return {
+          "label": label,
+          "message": message,
+          "color": "red"
+        }
     fraction = 0
     assert stat in ("reviewed", "translated")
+    resource_found = False
     for resource in resources:
         if resource_slug is not None and resource["slug"] != resource_slug:
             continue
@@ -347,9 +371,16 @@ def project_progress_result(organization_slug, project_slug, resource_slug, stat
             if isinstance(statistic, dict) and statistic["name"] == stat:
                 fraction += statistic["percentage"]
                 found_stat = True
+                resource_found = True
         assert found_stat, "Found the stat " + stat
     if resource_slug is None:
         fraction /= len(resources)
+    elif not resource_found:
+        return {
+          "label": label,
+          "message": "resource not found",
+          "color": "red"
+        }
     # provide json service interface
     # see https://shields.io/#/endpoint
     result = {
