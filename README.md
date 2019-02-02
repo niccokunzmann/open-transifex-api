@@ -108,8 +108,10 @@ docker build . -t niccokunzmann/open-transifex-api
 
 ## Related Work
 
-- https://github.com/transifex/transifex/issues/319
-- https://github.com/greatislander/tenpercent
+- [Issue about badges in Transifex](https://github.com/transifex/transifex/issues/319)
+- [Service in node.js](https://github.com/greatislander/tenpercent)
+- [Issue about Transifex badges in shields.io](https://github.com/badges/shields/issues/497)
+- [Information about the badges in the Transifex Community Forum](https://community.transifex.com/t/development-badges-and-opening-the-api-of-a-project/161)
 
 [quelltext]: https://transifex.quelltext.eu
 
