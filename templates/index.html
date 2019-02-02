@@ -25,7 +25,7 @@
                 <a href="{{ endpoint["example"].format(host=host) }}">{{ endpoint["path"] }}</a>.
             </p>
             <pre>
-curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
+curl -i -L -X GET '{{ endpoint["example"].format(host=host) }}'
             </pre>
             {% if endpoint["modifications"]: %}
                 <p>
@@ -40,7 +40,7 @@ curl -i -L --user -X GET '{{ endpoint["example"].format(host=host) }}'
                             This is an example command for
                             <a href="{{ modification["example"].format(host=host) }}">{{ modification["path"] }}</a>.
                         </p>
-                        <pre>curl -i -L --user -X GET '{{ modification["example"].format(host=host) }}'</pre>
+                        <pre>curl -i -L -X GET '{{ modification["example"].format(host=host) }}'</pre>
                     </li>
                 {% endfor %}
                 </ul>
